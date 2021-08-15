@@ -43,7 +43,7 @@
                             </div>
                             <div>
                                 <button id="submit-btn" type="submit" class="submit-btn">Submit</button>
-                                <p class="action-left">3 try left</p>
+                                <p class="action-left"><span id="try-number">3</span> try left</p>
                             </div>
                     </div>
                 </div>
@@ -56,24 +56,32 @@
     </div>
 
         <script>
-            let pinDisplay, userDisplay;
+            let pinDisplay, userDisplay, previousValue, count = 3;
 
             let matchNotify = document.getElementById('match-notify');
             let unMatchNotify = document.getElementById('unmatched-notify');
             matchNotify.style.display = "none";
             unMatchNotify.style.display = "none";
 
+            let tryNumber = document.getElementById('try-number');
+
             let gPin = document.getElementById('generate-btn');
             gPin.addEventListener('click', function (){
-                matchNotify.style.display = "none";
-                unMatchNotify.style.display = "none";
 
-                pinDisplay = document.getElementById('pin-display');
-                let randValue = Math.ceil(Math.random() * 10000);
-                if (randValue < 999){
-                    randValue = "0" +randValue;
+                if (count >= 0){
+                    count = 3;
+                    tryNumber.innerText = count;
+                    matchNotify.style.display = "none";
+                    unMatchNotify.style.display = "none";
+
+                    pinDisplay = document.getElementById('pin-display');
+                    let randValue = Math.ceil(Math.random() * 10000);
+                    if (randValue < 999){
+                        randValue = "0" +randValue;
+                    }
+                    pinDisplay.value = randValue;
                 }
-                pinDisplay.value = randValue;
+
             })
 
             let submitBtn = document.getElementById('submit-btn');
@@ -84,8 +92,16 @@
                     unMatchNotify.style.display = "none";
                 }
                 else {
-                    unMatchNotify.style.display = "block";
-                    matchNotify.style.display = "none";
+                    count--;
+                    if (count >= 0){
+                        unMatchNotify.style.display = "block";
+                        matchNotify.style.display = "none";
+                        tryNumber.innerText = count;
+                    }
+                    else {
+                        submitBtn.style.display = "none";
+                    }
+
                 }
             });
 
@@ -99,7 +115,6 @@
                 console.log(userDisplay);
                 userDisplay = userDisplay.slice(0, -1);
                 document.getElementById("user-display").value = userDisplay;
-                //userDisplay.value.pop();
             }
 
             function clr()
