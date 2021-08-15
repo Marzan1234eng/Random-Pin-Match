@@ -12,37 +12,37 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="pin-generator half-width">
-                    <input class="form-control" type="text">
-                    <button class="generate-btn">Generate Pin</button>
+                    <input id="pin-display" class="form-control" type="text">
+                    <button id="generate-btn" class="generate-btn">Generate Pin</button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="input-section half-width">
-                    <input class="form-control" type="text">
+                    <input id="user-display" class="form-control" type="text">
                     <div class="numbers">
                         <div class="calc-body">
                             <div class="calc-button-row">
-                              <div class="button">7</div>
-                              <div class="button">8</div>
-                              <div class="button">9</div>
+                              <div class="button" onclick="dis('7')">7</div>
+                              <div class="button" onclick="dis('8')">8</div>
+                              <div class="button" onclick="dis('9')">9</div>
                             </div>
                             <div class="calc-button-row">
-                              <div class="button">4</div>
-                              <div class="button">5</div>
-                              <div class="button">6</div>
+                              <div class="button" onclick="dis('4')">4</div>
+                              <div class="button" onclick="dis('5')">5</div>
+                              <div class="button" onclick="dis('6')">6</div>
                             </div>
                             <div class="calc-button-row">
-                              <div class="button">1</div>
-                              <div class="button">2</div>
-                              <div class="button">3</div>
+                              <div class="button" onclick="dis('1')">1</div>
+                              <div class="button" onclick="dis('2')">2</div>
+                              <div class="button" onclick="dis('3')">3</div>
                             </div>
                             <div class="calc-button-row">
-                                <div class="button"><</div>
-                                <div class="button">0</div>
-                                <div class="button">C</div>
+                                <div class="button" onclick="del()"><</div>
+                                <div class="button" onclick="dis('0')">0</div>
+                                <div class="button" onclick="clr()">C</div>
                             </div>
                             <div>
-                                <button type="submit" class="submit-btn">Submit</button>
+                                <button id="submit-btn" type="submit" class="submit-btn">Submit</button>
                                 <p class="action-left">3 try left</p>
                             </div>
                     </div>
@@ -50,9 +50,62 @@
             </div>
         </div>
         <div class="notify-section">
-            <p class="notify">❌ Pin Didn't Match, Please try again</p>
-            <p class="notify">✅ Pin Matched... Secret door is opening for you</p>
+            <p id="unmatched-notify" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="match-notify" class="notify">✅ Pin Matched... Secret door is opening for you</p>
         </div>
     </div>
+
+        <script>
+            let pinDisplay, userDisplay;
+
+            let matchNotify = document.getElementById('match-notify');
+            let unMatchNotify = document.getElementById('unmatched-notify');
+            matchNotify.style.display = "none";
+            unMatchNotify.style.display = "none";
+
+            let gPin = document.getElementById('generate-btn');
+            gPin.addEventListener('click', function (){
+                matchNotify.style.display = "none";
+                unMatchNotify.style.display = "none";
+
+                pinDisplay = document.getElementById('pin-display');
+                let randValue = Math.ceil(Math.random() * 10000);
+                if (randValue < 999){
+                    randValue = "0" +randValue;
+                }
+                pinDisplay.value = randValue;
+            })
+
+            let submitBtn = document.getElementById('submit-btn');
+            submitBtn.addEventListener('click', function (){
+
+                if (pinDisplay.value === userDisplay){
+                    matchNotify.style.display = "block";
+                    unMatchNotify.style.display = "none";
+                }
+                else {
+                    unMatchNotify.style.display = "block";
+                    matchNotify.style.display = "none";
+                }
+            });
+
+            function dis(val)
+            {
+                userDisplay = document.getElementById("user-display").value+=val
+            }
+
+            function del(){
+                console.log(typeof (userDisplay));
+                console.log(userDisplay);
+                userDisplay = userDisplay.slice(0, -1);
+                document.getElementById("user-display").value = userDisplay;
+                //userDisplay.value.pop();
+            }
+
+            function clr()
+            {
+                document.getElementById("user-display").value = ""
+            }
+        </script>
 </body>
 </html>
